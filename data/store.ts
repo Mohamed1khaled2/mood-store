@@ -1,0 +1,288 @@
+export type LocalizedText = {
+  en: string;
+  ar: string;
+};
+
+export type ProductBadge = "best-seller" | "new" | "featured";
+
+export type Product = {
+  id: string;
+  slug: string;
+  name: LocalizedText;
+  note: LocalizedText;
+  description: LocalizedText;
+  price: string;
+  color: string;
+  accentColor: string;
+  category: string;
+  badge?: ProductBadge;
+  oldPrice?: string;
+  isSoldOut?: boolean;
+  images?: string[];
+  videoUrl?: string;
+};
+
+export type Category = {
+  id: string;
+  name: LocalizedText;
+  description: LocalizedText;
+  color: string;
+  textColor: string;
+  productCount: number;
+};
+
+export type Testimonial = {
+  id: string;
+  name: LocalizedText;
+  review: LocalizedText;
+  rating: number;
+  product: string;
+};
+
+export type StorePerk = {
+  title: LocalizedText;
+  description: LocalizedText;
+  icon: string;
+};
+
+export const categories: Category[] = [
+  {
+    id: "amber",
+    name: { en: "Amber", ar: "عنبر" },
+    description: {
+      en: "Warm, resinous, and deeply luxurious",
+      ar: "دافئ، راتنجي، وفخامة عميقة",
+    },
+    color: "#8c5a3c",
+    textColor: "#fffaf3",
+    productCount: 3,
+  },
+  {
+    id: "musk",
+    name: { en: "Musk", ar: "مسك" },
+    description: {
+      en: "Clean, soft, and intimately elegant",
+      ar: "نظيف، ناعم، وأنيق بشكل حميمي",
+    },
+    color: "#e8d8c8",
+    textColor: "#201711",
+    productCount: 2,
+  },
+  {
+    id: "fresh",
+    name: { en: "Fresh", ar: "منعش" },
+    description: {
+      en: "Bright, citrusy, and effortlessly crisp",
+      ar: "مشرق، حمضي، ومنعش بسهولة",
+    },
+    color: "#d99a52",
+    textColor: "#201711",
+    productCount: 2,
+  },
+  {
+    id: "oud",
+    name: { en: "Oud", ar: "عود" },
+    description: {
+      en: "Rich, smoky, and timelessly oriental",
+      ar: "غني، دخاني، وشرقي خالد",
+    },
+    color: "#3a2a20",
+    textColor: "#f4d7b1",
+    productCount: 2,
+  },
+  {
+    id: "floral",
+    name: { en: "Floral", ar: "زهري" },
+    description: {
+      en: "Delicate, romantic, and gracefully blooming",
+      ar: "رقيق، رومانسي، ومتفتح بأناقة",
+    },
+    color: "#c4917a",
+    textColor: "#fffaf3",
+    productCount: 1,
+  },
+];
+
+export const products: Product[] = [
+  {
+    id: "p1",
+    slug: "amber-night",
+    name: { en: "Amber Night", ar: "ليلة العنبر" },
+    note: { en: "Amber, vanilla, oud", ar: "عنبر، فانيليا، عود" },
+    description: {
+      en: "A warm embrace of golden amber and smooth vanilla, deepened with precious oud wood. Perfect for evening occasions.",
+      ar: "عناق دافئ من العنبر الذهبي والفانيليا الناعمة، معمق بخشب العود الثمين. مثالي للمناسبات المسائية.",
+    },
+    price: "LE 2,250.00",
+    color: "#8c5a3c",
+    accentColor: "#f4d7b1",
+    category: "amber",
+    badge: "best-seller",
+  },
+  {
+    id: "p2",
+    slug: "white-musk",
+    name: { en: "White Musk", ar: "مسك أبيض" },
+    note: { en: "Musk, iris, clean linen", ar: "مسك، آيرس، انتعاش ناعم" },
+    description: {
+      en: "Pure white musk blended with delicate iris and the freshness of sun-dried linen. An everyday essential.",
+      ar: "مسك أبيض نقي ممزوج بالآيرس الرقيق وانتعاش الكتان المجفف بالشمس. أساسي ليومك.",
+    },
+    price: "LE 5,700.00",
+    oldPrice: "LE 6,000.00",
+    color: "#e8d8c8",
+    accentColor: "#8c5a3c",
+    category: "musk",
+    badge: "best-seller",
+  },
+  {
+    id: "p3",
+    slug: "citrus-veil",
+    name: { en: "Citrus Veil", ar: "حجاب الحمضيات" },
+    note: { en: "Bergamot, neroli, cedar", ar: "برغموت، نيرولي، خشب الأرز" },
+    description: {
+      en: "A bright burst of Italian bergamot and neroli, grounded with warm cedarwood. Fresh and sophisticated.",
+      ar: "انفجار مشرق من البرغموت الإيطالي والنيرولي، مرتكز على خشب الأرز الدافئ. منعش ومتطور.",
+    },
+    price: "LE 1,050.00",
+    color: "#d99a52",
+    accentColor: "#fffaf3",
+    category: "fresh",
+    badge: "best-seller",
+  },
+  {
+    id: "p4",
+    slug: "royal-oud",
+    name: { en: "Royal Oud", ar: "عود ملكي" },
+    note: { en: "Oud, saffron, rose", ar: "عود، زعفران، ورد" },
+    description: {
+      en: "Majestic oud wood meets precious saffron and Damascene rose. A regal scent for bold statements.",
+      ar: "عود ملكي يلتقي بالزعفران الثمين وورد دمشقي. عطر ملكي للبيانات الجريئة.",
+    },
+    price: "LE 3,700.00",
+    isSoldOut: true,
+    color: "#3a2a20",
+    accentColor: "#d4a574",
+    category: "oud",
+    badge: "featured",
+  },
+  {
+    id: "p5",
+    slug: "velvet-rose",
+    name: { en: "Velvet Rose", ar: "ورد مخملي" },
+    note: { en: "Rose, peony, sandalwood", ar: "ورد، فاوانيا، صندل" },
+    description: {
+      en: "Luxurious Turkish rose and soft peony, resting on a bed of creamy sandalwood. Romantically elegant.",
+      ar: "ورد تركي فاخر وفاوانيا ناعمة، يستقر على قاعدة من خشب الصندل الكريمي. أنيق ورومانسي.",
+    },
+    price: "LE 1,600.00",
+    color: "#c4917a",
+    accentColor: "#fffaf3",
+    category: "floral",
+    badge: "new",
+  },
+  {
+    id: "p6",
+    slug: "ocean-breeze",
+    name: { en: "Ocean Breeze", ar: "نسيم المحيط" },
+    note: { en: "Sea salt, mint, vetiver", ar: "ملح بحري، نعناع، فيتيفر" },
+    description: {
+      en: "The invigorating freshness of ocean air with cool mint and earthy vetiver. Your daily energy boost.",
+      ar: "انتعاش منشط من هواء المحيط مع النعناع البارد والفيتيفر الترابي. دفعة طاقة يومية.",
+    },
+    price: "LE 1,800.00",
+    color: "#7a9e9f",
+    accentColor: "#fffaf3",
+    category: "fresh",
+    badge: "new",
+  },
+  {
+    id: "p7",
+    slug: "golden-amber",
+    name: { en: "Golden Amber", ar: "عنبر ذهبي" },
+    note: { en: "Amber, honey, tonka", ar: "عنبر، عسل، تونكا" },
+    description: {
+      en: "Rich golden amber infused with wild honey and warm tonka bean. A liquid sunset in a bottle.",
+      ar: "عنبر ذهبي غني ممزوج بالعسل البري وحبة التونكا الدافئة. غروب شمس سائل في زجاجة.",
+    },
+    price: "$85",
+    color: "#b8860b",
+    accentColor: "#fffaf3",
+    category: "amber",
+    badge: "new",
+  },
+  {
+    id: "p8",
+    slug: "midnight-oud",
+    name: { en: "Midnight Oud", ar: "عود منتصف الليل" },
+    note: { en: "Oud, incense, leather", ar: "عود، بخور، جلد" },
+    description: {
+      en: "Deep midnight oud layered with sacred incense and supple leather. For the connoisseur.",
+      ar: "عود منتصف الليل العميق مع بخور مقدس وجلد ناعم. للذواقة الحقيقي.",
+    },
+    price: "$135",
+    color: "#1a1a2e",
+    accentColor: "#d4a574",
+    category: "oud",
+  },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    id: "t1",
+    name: { en: "Sarah M.", ar: "سارة م." },
+    review: {
+      en: "Amber Night is absolutely stunning. I get compliments every time I wear it. The longevity is incredible — lasts well into the next day.",
+      ar: "ليلة العنبر مذهل. بحصل على إطراء في كل مرة أرتديه. الثبات لا يصدق — يستمر لليوم التالي.",
+    },
+    rating: 5,
+    product: "Amber Night",
+  },
+  {
+    id: "t2",
+    name: { en: "Ahmed K.", ar: "أحمد ك." },
+    review: {
+      en: "Royal Oud is my signature scent now. The saffron note is perfectly balanced. Worth every penny.",
+      ar: "عود ملكي بقى عطري المميز. نوتة الزعفران متوازنة بشكل مثالي. يستحق كل قرش.",
+    },
+    rating: 5,
+    product: "Royal Oud",
+  },
+  {
+    id: "t3",
+    name: { en: "Layla R.", ar: "ليلى ر." },
+    review: {
+      en: "White Musk is so clean and elegant. Perfect for the office and transitions beautifully into evening. My everyday go-to.",
+      ar: "مسك أبيض نظيف وأنيق جدًا. مثالي للمكتب وينتقل بشكل جميل للمساء. اختياري اليومي.",
+    },
+    rating: 4,
+    product: "White Musk",
+  },
+];
+
+export const storePerks: StorePerk[] = [
+  {
+    title: { en: "Gift ready", ar: "جاهز للهدايا" },
+    description: {
+      en: "Premium wrap and note cards for every special order.",
+      ar: "تغليف فاخر وكروت إهداء لكل طلب مميز.",
+    },
+    icon: "🎁",
+  },
+  {
+    title: { en: "Fast delivery", ar: "توصيل سريع" },
+    description: {
+      en: "Same-day dispatch for orders confirmed before noon.",
+      ar: "تجهيز الطلبات في نفس اليوم للطلبات المؤكدة قبل الظهر.",
+    },
+    icon: "🚀",
+  },
+  {
+    title: { en: "Scent guide", ar: "دليل اختيار العطر" },
+    description: {
+      en: "Simple notes and mood tags to help customers choose.",
+      ar: "نوتات واضحة وتصنيفات حسب الحالة لمساعدة العميل في الاختيار.",
+    },
+    icon: "🧭",
+  },
+];

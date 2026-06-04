@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getDb } from "../../data/db";
+import { getDb } from "@/data/db";
 import { FiPlus, FiEdit2, FiMove } from "react-icons/fi";
 import DeleteSectionButton from "./DeleteSectionButton";
 
@@ -65,9 +65,9 @@ export default async function SectionsAdminPage() {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-2">
-                      <button className="h-8 w-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" title="تعديل (قريباً)">
+                      <Link href={`/admin/sections/edit/${section.id}`} className="h-8 w-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" title="تعديل">
                         <FiEdit2 />
-                      </button>
+                      </Link>
                       <DeleteSectionButton sectionId={section.id} />
                     </div>
                   </td>

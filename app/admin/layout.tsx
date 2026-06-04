@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { FiGrid, FiBox, FiList, FiSettings } from "react-icons/fi";
+import { FiGrid, FiBox, FiList, FiSettings, FiShoppingBag } from "react-icons/fi";
+import { Cairo } from "next/font/google";
+import "../globals.css";
+
+const cairo = Cairo({
+  subsets: ["arabic"],
+  variable: "--font-cairo",
+});
 
 export default function AdminLayout({
   children,
@@ -7,11 +14,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      className="flex h-screen overflow-hidden bg-[#f8f9fa] text-gray-900"
-      dir="rtl"
-      lang="ar"
-    >
+    <html lang="ar" dir="rtl" data-scroll-behavior="smooth">
+      <body className={`${cairo.variable} antialiased`}>
+        <div className="flex h-screen overflow-hidden bg-[#f8f9fa] text-gray-900">
       <aside className="w-64 bg-[#201711] text-[#fffaf3] flex flex-col">
         <div className="p-6 border-b border-white/10">
           <Link
@@ -37,6 +42,10 @@ export default function AdminLayout({
           <Link href="/admin/sections" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition">
             <FiList className="text-lg" />
             <span className="font-medium">أقسام الصفحة الرئيسية</span>
+          </Link>
+          <Link href="/admin/orders" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition">
+            <FiShoppingBag className="text-lg" />
+            <span className="font-medium">الطلبات</span>
           </Link>
         </nav>
         <div className="p-4 border-t border-white/10">
@@ -64,6 +73,8 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
-    </div>
+        </div>
+      </body>
+    </html>
   );
 }

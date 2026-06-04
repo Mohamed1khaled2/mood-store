@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, locales } from "./app/i18n";
+import { routing } from "./i18n/routing";
+
+const { defaultLocale, locales } = routing;
 
 const PUBLIC_FILE = /\.(.*)$/;
 

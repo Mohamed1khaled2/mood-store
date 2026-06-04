@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getDb } from "../../data/db";
+import { getDb } from "@/data/db";
 import { FiPlus, FiEdit2 } from "react-icons/fi";
 import DeleteCategoryButton from "./DeleteCategoryButton";
 
@@ -58,9 +58,9 @@ export default async function CategoriesAdminPage() {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-2">
-                      <button className="h-8 w-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" title="تعديل (قريباً)">
+                      <Link href={`/admin/categories/edit/${cat.id}`} className="h-8 w-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition" title="تعديل">
                         <FiEdit2 />
-                      </button>
+                      </Link>
                       <DeleteCategoryButton categoryId={cat.id} />
                     </div>
                   </td>
