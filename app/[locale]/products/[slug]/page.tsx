@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { dictionary, Locale } from "@/app/i18n";
 import ProductGallery from "./ProductGallery";
 import ProductActions from "./ProductActions";
 import ProductCard from "@/components/home/ProductCard";
+import { absoluteUrl, localizedPath, siteConfig } from "@/utils/site-config";
 
 type ProductPageProps = {
   params: Promise<{
@@ -13,6 +15,61 @@ type ProductPageProps = {
     slug: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const db = await getDb();
+  const product = db.products.find((p) => p.slug === slug);
+
+  if (!product) {
+    return {
+      title: "Product not found",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const title = product.name[locale];
+  const description = product.description[locale];
+  const path = localizedPath(locale, `/products/${product.slug}`);
+  const productImage =
+    product.images?.[0] || "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=1200";
+  const imageUrl = productImage.startsWith("http")
+    ? productImage
+    : absoluteUrl(productImage);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: path,
+      languages: {
+        en: localizedPath("en", `/products/${product.slug}`),
+        ar: localizedPath("ar", `/products/${product.slug}`),
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: path,
+      type: "website",
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: imageUrl,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;

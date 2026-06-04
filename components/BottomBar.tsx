@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import type { Locale } from "@/app/i18n";
 
 export type BottomBarNavCard = {
@@ -27,6 +29,45 @@ export default function BottomBar({
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeTab, setActiveTab] = useState("home");
+
+  // Live search states
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      import("@/app/admin/actions").then(({ getProductsList }) => {
+        getProductsList().then((data) => {
+          setProducts(data);
+          setFilteredProducts(data);
+        });
+      });
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      setSearchQuery("");
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSearchOpen]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredProducts(products);
+      return;
+    }
+    const q = searchQuery.toLowerCase();
+    const filtered = products.filter((p) => {
+      const nameAr = p.name?.ar?.toLowerCase() || "";
+      const nameEn = p.name?.en?.toLowerCase() || "";
+      const cat = p.category?.toLowerCase() || "";
+      return nameAr.includes(q) || nameEn.includes(q) || cat.includes(q);
+    });
+    setFilteredProducts(filtered);
+  }, [searchQuery, products]);
 
   // Auto-hide on scroll down, show on scroll up
   useEffect(() => {
@@ -254,24 +295,115 @@ export default function BottomBar({
               );
             }
 
+            if (tab.isSearch) {
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setIsSearchOpen(true)}
+                  className="outline-none focus:outline-none active:scale-95 transition-transform cursor-pointer"
+                  aria-label={tab.label}
+                >
+                  {content}
+                </button>
+              );
+            }
+
             return (
-              <a
+              <Link
                 key={tab.id}
                 href={tab.href}
                 onClick={() => {
-                  if (!tab.isSearch) {
-                    setActiveTab(tab.id);
-                  }
+                  setActiveTab(tab.id);
                 }}
                 className="outline-none focus:outline-none active:scale-95 transition-transform"
                 aria-label={tab.label}
               >
                 {content}
-              </a>
+              </Link>
             );
           })}
         </div>
       </div>
+
+      {/* Live Search Modal */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[250] bg-black/60 backdrop-blur-md flex flex-col pt-16 px-4 pb-6 transition-all duration-300">
+          <div className="max-w-2xl mx-auto w-full bg-white rounded-3xl p-6 shadow-2xl flex flex-col max-h-[80vh] border border-gray-100">
+            {/* Search Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+              <span className="text-sm font-bold text-[#201711] uppercase tracking-wider">
+                {locale === "ar" ? "البحث عن منتج" : "Search Product"}
+              </span>
+              <button
+                onClick={() => setIsSearchOpen(false)}
+                className="h-8 w-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-500 transition cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Input Bar */}
+            <div className="mt-4 relative">
+              <input
+                type="text"
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={locale === "ar" ? "ابحث بالاسم أو الفئة..." : "Search by name or category..."}
+                className="w-full h-12 rounded-xl border border-gray-200 bg-gray-50/50 px-4 pl-10 pr-4 text-sm text-[#201711] outline-none transition focus:border-[#8c5a3c]/30 focus:ring-2 focus:ring-[#8c5a3c]/10"
+              />
+              <span className="absolute left-3 top-3.5 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </span>
+            </div>
+
+            {/* Search Results */}
+            <div className="mt-4 flex-1 overflow-y-auto space-y-3 pr-1">
+              {filteredProducts.length === 0 ? (
+                <div className="text-center py-8 text-sm text-gray-400 font-medium">
+                  {locale === "ar" ? "لا توجد نتائج مطابقة" : "No results match your search"}
+                </div>
+              ) : (
+                filteredProducts.map((prod) => (
+                  <Link
+                    key={prod.id}
+                    href={`/${locale}/products/${prod.slug || prod.id}`}
+                    onClick={() => setIsSearchOpen(false)}
+                    className="flex items-center gap-3 p-2 rounded-2xl hover:bg-gray-50 transition border border-transparent hover:border-gray-100"
+                  >
+                    <div className="relative w-12 h-14 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 flex-shrink-0">
+                      <Image
+                        src={prod.images?.[0] || "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=80"}
+                        alt={prod.name[locale]}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-bold text-[#201711] truncate">
+                        {prod.name[locale]}
+                      </h4>
+                      <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-0.5">
+                        {prod.category}
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold text-[#8c5a3c] flex-shrink-0">
+                      {prod.price}
+                    </span>
+                  </Link>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Safe area spacer for notched devices */}
       <div className="h-[env(safe-area-inset-bottom,0px)] bg-transparent" />

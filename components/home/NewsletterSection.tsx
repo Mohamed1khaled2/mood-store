@@ -49,11 +49,11 @@ export default function NewsletterSection({ dict }: NewsletterSectionProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={dict.newsletter.placeholder}
                 required
-                className="h-12 flex-1 rounded-md border border-white/15 bg-white/10 px-4 text-sm text-[#fffaf3] placeholder-[#f4d7b1]/50 outline-none transition focus:border-[#f4d7b1]/40 focus:ring-1 focus:ring-[#f4d7b1]/30"
+                className="h-12 flex-1 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm px-5 text-sm text-[#fffaf3] placeholder-[#f4d7b1]/40 outline-none transition-all duration-300 focus:border-[#f4d7b1]/40 focus:bg-white/8 focus:ring-2 focus:ring-[#f4d7b1]/10 text-center sm:text-start rtl:text-center font-medium"
               />
               <button
                 type="submit"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-[#f4d7b1] px-6 text-sm font-semibold text-[#201711] transition hover:bg-[#e8c89e]"
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-[#f4d7b1] px-8 text-sm font-bold text-[#201711] transition-all duration-300 hover:bg-[#e8c89e] hover:scale-[1.02] active:scale-[0.98] shadow-md cursor-pointer"
               >
                 {dict.newsletter.cta}
               </button>

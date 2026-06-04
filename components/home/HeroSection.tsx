@@ -1,3 +1,4 @@
+import Image from "next/image";
 import BorderGlow from "../BorderGlow";
 import type { Dictionary } from "@/app/i18n";
 
@@ -50,8 +51,15 @@ export default function HeroSection({ dict, title, copy }: HeroSectionProps) {
           >
             <div className="relative min-h-[330px] px-5 pb-6 pt-8 sm:min-h-[390px] sm:px-8">
               <div className="mx-auto h-20 w-14 rounded-b-2xl rounded-t-md bg-[#f4d7b1] sm:h-24 sm:w-16" />
-              <div className="mx-auto mt-8 flex h-36 w-32 items-center justify-center rounded-2xl border border-[#f4d7b1]/45 bg-[#fffaf3] text-center text-sm font-bold uppercase tracking-[0.18em] text-[#8c5a3c] sm:h-44 sm:w-40">
-                Mood
+              <div className="mx-auto mt-8 flex h-36 w-32 items-center justify-center rounded-2xl border border-[#f4d7b1]/45 bg-[#fffaf3] px-5 sm:h-44 sm:w-40 sm:px-6">
+                <Image
+                  src="/logo.png"
+                  alt="Mood Store"
+                  width={132}
+                  height={48}
+                  className="h-auto w-full object-contain"
+                  priority
+                />
               </div>
               <div className="mt-8 grid grid-cols-2 gap-3 text-[#fffaf3]">
                 <div className="rounded-md bg-white/10 p-3">

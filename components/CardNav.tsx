@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState, useContext } from "react";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/app/i18n";
 import { useCart } from "./CartContext";
 
@@ -47,6 +48,7 @@ const CardNav: React.FC<CardNavProps> = ({
   localeSwitcherHref,
   localeSwitcherLabel,
 }) => {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -60,6 +62,47 @@ const CardNav: React.FC<CardNavProps> = ({
   try {
     cart = useCart();
   } catch (e) {}
+
+  const isCheckout = pathname?.includes("/checkout");
+
+  if (isCheckout) {
+    return (
+      <div className={`w-full ${className}`}>
+        <div className="w-full bg-[#fffaf3] border-b border-[#201711]/5 py-4">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[50px]">
+            {/* Back Button */}
+            <div className="flex w-1/3 justify-start">
+              <a
+                href={`/${locale}`}
+                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#201711]/60 hover:text-[#201711] transition"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="rtl:rotate-180">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span className="hidden sm:inline">{locale === "ar" ? "الرئيسية" : "Home"}</span>
+              </a>
+            </div>
+            {/* Centered Logo */}
+            <div className="flex items-center justify-center w-1/3">
+              <a href={`/${locale}`} aria-label="Mood home">
+                <Image
+                  src={logo}
+                  alt={logoAlt}
+                  width={160}
+                  height={46}
+                  priority
+                  className="h-[36px] w-auto md:h-[46px]"
+                />
+              </a>
+            </div>
+            {/* Empty Right Column to maintain flex spacing */}
+            <div className="w-1/3" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

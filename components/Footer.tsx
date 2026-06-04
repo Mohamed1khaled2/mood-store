@@ -1,7 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import type { Dictionary, Locale } from "@/app/i18n";
 import { getSettings } from "@/data/db";
+import { getFooterLinks } from "@/utils/site-config";
 
 type FooterProps = {
   locale: Locale;
@@ -13,7 +15,7 @@ function FooterColumn({
   links,
 }: {
   title: string;
-  links: string[];
+  links: Array<{ label: string; href: string }>;
 }) {
   return (
     <div className="flex flex-col gap-5">
@@ -22,13 +24,13 @@ function FooterColumn({
       </h3>
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
-          <li key={link}>
-            <a
-              href="#"
+          <li key={link.href}>
+            <Link
+              href={link.href}
               className="inline-flex text-[14px] font-normal text-white/70 transition-all duration-300 hover:text-[#f4d7b1] hover:translate-x-1.5 rtl:hover:-translate-x-1.5"
             >
-              {link}
-            </a>
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>
@@ -55,17 +57,71 @@ const PaymentIcons = () => (
   </div>
 );
 
+function FollowColumn({
+  locale,
+  facebook,
+  instagram,
+}: {
+  locale: Locale;
+  facebook?: string;
+  instagram?: string;
+}) {
+  if (!facebook && !instagram) return null;
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div>
+        <h3 className="text-xs font-bold uppercase tracking-widest text-[#f4d7b1]/80">
+          {locale === "ar" ? "تابعنا" : "Follow us"}
+        </h3>
+        <p className="mt-3 max-w-[210px] text-[13px] leading-relaxed text-white/40">
+          {locale === "ar"
+            ? "تابع Mood Store على إنستجرام وفيسبوك لأحدث العطور والعروض."
+            : "Follow Mood Store on Instagram and Facebook for new scents and offers."}
+        </p>
+      </div>
+
+      <div className="grid gap-2">
+        {instagram && (
+          <a
+            href={instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex h-11 items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 text-[13px] font-semibold text-white/70 transition-all duration-300 hover:border-[#ee2a7b]/30 hover:bg-white/10 hover:text-white"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white transition group-hover:bg-gradient-to-tr group-hover:from-[#f9ce71] group-hover:via-[#ee2a7b] group-hover:to-[#6228d7]">
+              <FaInstagram className="text-base" />
+            </span>
+            Instagram
+          </a>
+        )}
+        {facebook && (
+          <a
+            href={facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex h-11 items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 text-[13px] font-semibold text-white/70 transition-all duration-300 hover:border-[#1877F2]/30 hover:bg-white/10 hover:text-white"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white transition group-hover:bg-[#1877F2]">
+              <FaFacebookF className="text-sm" />
+            </span>
+            Facebook
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default async function Footer({ locale, dict }: FooterProps) {
   const otherLocale = locale === "ar" ? "en" : "ar";
   const settings = await getSettings();
-  
-  // Format WhatsApp number to link
-  const cleanPhone = settings.whatsapp.replace(/[^0-9]/g, "");
-  const whatsappUrl = `https://wa.me/${cleanPhone}`;
+  const footerLinks = getFooterLinks(locale, dict, settings);
+  const whatsappUrl = footerLinks.contact.whatsapp;
 
   return (
-    <footer className="relative bg-gradient-to-b from-[#18110d] to-[#0c0806] border-t border-[#8c5a3c]/15 px-6 pb-6 pt-16 text-white sm:px-10 md:px-16 overflow-hidden">
-      <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] lg:gap-12 relative z-10">
+    <footer className="relative bg-gradient-to-b from-[#18110d] to-[#0c0806] border-t border-[#8c5a3c]/15 px-6 pb-32 sm:pb-12 pt-16 text-white sm:px-10 md:px-16 overflow-hidden">
+      <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr_1.15fr] lg:gap-12 relative z-10">
         
         {/* Column 1: Brand & Socials */}
         <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
@@ -145,18 +201,19 @@ export default async function Footer({ locale, dict }: FooterProps) {
           </div>
         </div>
 
-        {/* Column 3, 4, 5: Custom Links */}
-        <FooterColumn
-          title={dict.footer.companyTitle}
-          links={dict.footer.companyLinks}
-        />
+        {/* Column 3, 4: Custom Links */}
         <FooterColumn 
           title={dict.footer.moreTitle} 
-          links={dict.footer.moreLinks} 
+          links={footerLinks.more} 
         />
         <FooterColumn
           title={dict.footer.customerTitle}
-          links={dict.footer.customerLinks}
+          links={footerLinks.customer}
+        />
+        <FollowColumn
+          locale={locale}
+          facebook={settings.facebook}
+          instagram={settings.instagram}
         />
       </div>
 
@@ -180,4 +237,3 @@ export default async function Footer({ locale, dict }: FooterProps) {
     </footer>
   );
 }
-

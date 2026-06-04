@@ -141,3 +141,8 @@ export async function deleteOrder(orderId: string) {
   revalidatePath("/admin/orders");
 }
 
+export async function getProductsList() {
+  const db = await getDb();
+  return db.products || [];
+}
+
