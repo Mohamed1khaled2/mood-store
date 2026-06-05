@@ -3,6 +3,7 @@ import { getDb } from "@/data/db";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
 import DeleteProductButton from "./DeleteProductButton";
 
+export const metadata = { title: "المنتجات" };
 export default async function ProductsAdminPage() {
   const db = await getDb();
   const products = db.products;

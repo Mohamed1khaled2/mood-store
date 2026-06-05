@@ -3,6 +3,7 @@ import { getDb } from "@/data/db";
 import { FiPlus, FiEdit2, FiMove } from "react-icons/fi";
 import DeleteSectionButton from "./DeleteSectionButton";
 
+export const metadata = { title: "أقسام الصفحة الرئيسية" };
 export default async function SectionsAdminPage() {
   const db = await getDb();
   const sections = db.sections.sort((a, b) => a.order - b.order);

@@ -2,6 +2,8 @@ import { getDb } from "@/data/db";
 import { notFound } from "next/navigation";
 import EditProductForm from "./EditProductForm";
 
+export const metadata = { title: "تعديل المنتج" };
+
 export default async function EditProductPage({
   params,
 }: {

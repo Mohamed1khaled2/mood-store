@@ -1,6 +1,8 @@
 import { getSettings } from "@/data/db";
 import SettingsForm from "./SettingsForm";
 
+export const metadata = { title: "الإعدادات" };
+
 export default async function SettingsPage() {
   const settings = await getSettings();
 

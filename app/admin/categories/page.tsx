@@ -3,6 +3,7 @@ import { getDb } from "@/data/db";
 import { FiPlus, FiEdit2 } from "react-icons/fi";
 import DeleteCategoryButton from "./DeleteCategoryButton";
 
+export const metadata = { title: "التصنيفات" };
 export default async function CategoriesAdminPage() {
   const db = await getDb();
   const categories = db.categories;

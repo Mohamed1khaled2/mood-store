@@ -33,7 +33,7 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
   };
 
   const handleDelete = (orderId: string) => {
-    if (!confirm("Are you sure you want to delete this order? This action is permanent.")) return;
+    if (!confirm("هل أنت متأكد من حذف هذا الطلب؟ هذا الإجراء لا يمكن التراجع عنه.")) return;
 
     startTransition(async () => {
       try {
@@ -56,13 +56,13 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
   const getStatusBadge = (status: Order["status"]) => {
     switch (status) {
       case "pending":
-        return <span className="px-2.5 py-1 text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded-lg">Pending</span>;
+        return <span className="px-2.5 py-1 text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded-lg">قيد الانتظار</span>;
       case "shipped":
-        return <span className="px-2.5 py-1 text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100 rounded-lg">Shipped</span>;
+        return <span className="px-2.5 py-1 text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100 rounded-lg">تم الشحن</span>;
       case "delivered":
-        return <span className="px-2.5 py-1 text-xs font-bold bg-green-50 text-green-700 border border-green-100 rounded-lg">Delivered</span>;
+        return <span className="px-2.5 py-1 text-xs font-bold bg-green-50 text-green-700 border border-green-100 rounded-lg">تم التوصيل</span>;
       case "cancelled":
-        return <span className="px-2.5 py-1 text-xs font-bold bg-red-50 text-red-700 border border-red-100 rounded-lg">Cancelled</span>;
+        return <span className="px-2.5 py-1 text-xs font-bold bg-red-50 text-red-700 border border-red-100 rounded-lg">ملغي</span>;
     }
   };
 
@@ -82,7 +82,7 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
                   : "border-transparent text-gray-500 hover:text-gray-950"
               }`}
             >
-              {st} ({st === 'all' ? orders.length : orders.filter(o => o.status === st).length})
+              {{all: 'الكل', pending: 'قيد الانتظار', shipped: 'تم الشحن', delivered: 'تم التوصيل', cancelled: 'ملغي'}[st]} ({st === 'all' ? orders.length : orders.filter(o => o.status === st).length})
             </button>
           ))}
         </div>
@@ -91,21 +91,21 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
         {filteredOrders.length === 0 ? (
           <div className="text-center py-16 bg-white border border-gray-100 rounded-2xl">
             <span className="text-3xl">📦</span>
-            <p className="text-sm font-bold text-gray-900 mt-3">No orders found</p>
-            <p className="text-xs text-gray-500 mt-1">There are no orders matching the selected filter.</p>
+            <p className="text-sm font-bold text-gray-900 mt-3">لا توجد طلبات</p>
+            <p className="text-xs text-gray-500 mt-1">لا توجد طلبات تطابق الفلتر المحدد.</p>
           </div>
         ) : (
           <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-right border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-[10px] font-bold uppercase tracking-widest text-gray-500 border-b border-gray-100">
-                    <th className="p-4">Order ID</th>
-                    <th className="p-4">Customer</th>
-                    <th className="p-4">Governorate</th>
-                    <th className="p-4">Total</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4 text-right">Actions</th>
+                    <th className="p-4">رقم الطلب</th>
+                    <th className="p-4">العميل</th>
+                    <th className="p-4">المحافظة</th>
+                    <th className="p-4">الإجمالي</th>
+                    <th className="p-4">الحالة</th>
+                    <th className="p-4 text-left">إجراءات</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50 text-xs text-gray-900">
@@ -125,14 +125,14 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
                       <td className="p-4 font-medium text-gray-600">{order.customerGovernorate}</td>
                       <td className="p-4 font-bold">LE {order.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                       <td className="p-4">{getStatusBadge(order.status)}</td>
-                      <td className="p-4 text-right" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex justify-end gap-1.5">
+                      <td className="p-4 text-left" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex justify-start gap-1.5">
                           {order.status === "pending" && (
                             <button
                               onClick={() => handleStatusChange(order.id, "shipped")}
                               className="px-2 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold rounded text-[10px] transition cursor-pointer"
                             >
-                              Ship
+                              شحن
                             </button>
                           )}
                           {order.status === "shipped" && (
@@ -140,7 +140,7 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
                               onClick={() => handleStatusChange(order.id, "delivered")}
                               className="px-2 py-1 bg-green-50 text-green-700 hover:bg-green-100 font-bold rounded text-[10px] transition cursor-pointer"
                             >
-                              Deliver
+                              تسليم
                             </button>
                           )}
                           {order.status !== "delivered" && order.status !== "cancelled" && (
@@ -148,14 +148,14 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
                               onClick={() => handleStatusChange(order.id, "cancelled")}
                               className="px-2 py-1 bg-red-50 text-red-700 hover:bg-red-100 font-bold rounded text-[10px] transition cursor-pointer"
                             >
-                              Cancel
+                              إلغاء
                             </button>
                           )}
                           <button
                             onClick={() => handleDelete(order.id)}
                             className="px-2 py-1 hover:bg-gray-100 text-gray-500 hover:text-red-600 font-bold rounded text-[10px] transition cursor-pointer"
                           >
-                            Delete
+                            حذف
                           </button>
                         </div>
                       </td>
@@ -173,7 +173,7 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
         <div className="lg:col-span-4 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-6 sticky top-8">
           <div className="flex justify-between items-center border-b border-gray-50 pb-4">
             <div>
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Order Details</span>
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">تفاصيل الطلب</span>
               <h2 className="text-lg font-bold text-gray-900">{selectedOrder.id}</h2>
             </div>
             <button
@@ -189,18 +189,18 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
 
           {/* Customer Info */}
           <div className="space-y-3.5 border-b border-gray-50 pb-5 text-xs">
-            <h3 className="text-[9px] font-bold uppercase tracking-widest text-gray-400">Customer Details</h3>
+            <h3 className="text-[9px] font-bold uppercase tracking-widest text-gray-400">بيانات العميل</h3>
             <div className="space-y-1.5 text-gray-900">
-              <div><span className="text-gray-500 font-medium">Name:</span> <strong className="font-semibold">{selectedOrder.customerName}</strong></div>
-              <div><span className="text-gray-500 font-medium">Phone:</span> <strong className="font-semibold">{selectedOrder.customerPhone}</strong></div>
-              <div><span className="text-gray-500 font-medium">Governorate:</span> <strong className="font-semibold">{selectedOrder.customerGovernorate}</strong></div>
-              <div><span className="text-gray-500 font-medium">Address:</span> <p className="text-gray-600 mt-1 leading-relaxed">{selectedOrder.customerAddress}</p></div>
+              <div><span className="text-gray-500 font-medium">الاسم:</span> <strong className="font-semibold">{selectedOrder.customerName}</strong></div>
+              <div><span className="text-gray-500 font-medium">الهاتف:</span> <strong className="font-semibold">{selectedOrder.customerPhone}</strong></div>
+              <div><span className="text-gray-500 font-medium">المحافظة:</span> <strong className="font-semibold">{selectedOrder.customerGovernorate}</strong></div>
+              <div><span className="text-gray-500 font-medium">العنوان:</span> <p className="text-gray-600 mt-1 leading-relaxed">{selectedOrder.customerAddress}</p></div>
             </div>
           </div>
 
           {/* Items */}
           <div className="space-y-3.5 border-b border-gray-50 pb-5 text-xs">
-            <h3 className="text-[9px] font-bold uppercase tracking-widest text-gray-400">Items Ordered</h3>
+            <h3 className="text-[9px] font-bold uppercase tracking-widest text-gray-400">المنتجات المطلوبة</h3>
             <div className="space-y-3">
               {selectedOrder.items.map((item, idx) => (
                 <div key={idx} className="flex justify-between items-center text-gray-900">
@@ -217,17 +217,17 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
           {/* Totals */}
           <div className="space-y-2.5 text-xs border-b border-gray-50 pb-5 text-gray-900">
             <div className="flex justify-between">
-              <span className="text-gray-500">Subtotal</span>
+              <span className="text-gray-500">المجموع الفرعي</span>
               <span className="font-semibold">LE {selectedOrder.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Shipping</span>
+              <span className="text-gray-500">الشحن</span>
               <span className="font-semibold">
-                {selectedOrder.shippingFee === 0 ? "Free" : `LE ${selectedOrder.shippingFee}`}
+                {selectedOrder.shippingFee === 0 ? "مجاني" : `${selectedOrder.shippingFee} ج.م`}
               </span>
             </div>
             <div className="flex justify-between text-sm font-bold pt-1.5">
-              <span>Total</span>
+              <span>الإجمالي</span>
               <span className="text-[#8c5a3c]">LE {selectedOrder.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
@@ -240,17 +240,17 @@ export default function OrdersList({ initialOrders }: OrdersListProps) {
               onChange={(e) => handleStatusChange(selectedOrder.id, e.target.value as Order["status"])}
               className="flex-1 h-10 px-3 text-xs font-semibold text-gray-950 border border-gray-200 bg-white rounded-xl focus:outline-none focus:border-[#8c5a3c]"
             >
-              <option value="pending">Pending</option>
-              <option value="shipped">Shipped</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="pending">قيد الانتظار</option>
+              <option value="shipped">تم الشحن</option>
+              <option value="delivered">تم التوصيل</option>
+              <option value="cancelled">ملغي</option>
             </select>
             <button
               onClick={() => handleDelete(selectedOrder.id)}
               disabled={isPending}
               className="h-10 px-4 border border-red-200 hover:bg-red-50 text-red-600 font-semibold rounded-xl text-xs transition cursor-pointer"
             >
-              Delete
+              حذف
             </button>
           </div>
         </div>
