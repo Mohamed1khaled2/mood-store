@@ -1,0 +1,40 @@
+.ethbat-plugin-shell {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.ethbat-plugin-heading {
+  margin: 0 0 1.5rem;
+  color: #201711;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+}
+
+.ethbat-plugin-host {
+  min-height: 4rem;
+  overflow: hidden;
+}
+
+.ethbat-plugin-status {
+  margin: 0.75rem 0 0;
+  color: #5b4434;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.ethbat-plugin-status:empty,
+.ethbat-plugin-status--ready {
+  display: none;
+}
+
+.ethbat-plugin-status--error {
+  color: #b42318;
+}
+
+@media (max-width: 640px) {
+  .ethbat-plugin-shell {
+    padding-inline: 0.25rem;
+  }
+}

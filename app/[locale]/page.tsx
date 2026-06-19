@@ -9,6 +9,7 @@ import ProductGridSection from "../../components/home/ProductGridSection";
 import TestimonialsSection from "../../components/home/TestimonialsSection";
 import { getDb } from "@/data/db";
 import { isLocale, dictionary } from "@/app/i18n";
+import { EthbatPlacementBlock } from "@/plugins/ethbat-reviews";
 
 export default async function Home({
   params,
@@ -91,6 +92,13 @@ export default async function Home({
 
         return null;
       })}
+
+      <EthbatPlacementBlock
+        placement="home"
+        locale={lang}
+        wrapperClassName="bg-[#faf5ee] px-4 py-10 sm:px-6 md:px-10 md:py-16"
+        heading={lang === "ar" ? "آراء عملائنا" : "Customer reviews"}
+      />
 
       {/* 4. Testimonials */}
       <TestimonialsSection

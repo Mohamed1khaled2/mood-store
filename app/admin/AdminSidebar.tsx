@@ -9,6 +9,7 @@ import {
   FiList,
   FiSettings,
   FiShoppingBag,
+  FiStar,
 } from "react-icons/fi";
 import { FiLoader } from "react-icons/fi";
 
@@ -22,6 +23,7 @@ const navLinks = [
     icon: FiList,
   },
   { href: "/admin/orders", label: "الطلبات", icon: FiShoppingBag },
+  { href: "/admin/ethbat-reviews", label: "تقييمات إثبات", icon: FiStar },
 ];
 
 const bottomLinks = [

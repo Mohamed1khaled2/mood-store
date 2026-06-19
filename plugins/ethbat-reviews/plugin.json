@@ -1,0 +1,18 @@
+{
+  "name": "ethbat-reviews",
+  "displayName": "تقييمات إثبات",
+  "version": "1.0.0",
+  "description": "تكامل إنتاجي لودجت تقييمات إثبات داخل متجر Next.js المخصص.",
+  "platform": {
+    "name": "Mood Store Custom Platform",
+    "next": ">=16.2.6",
+    "react": ">=19.2.0"
+  },
+  "entry": "index.ts",
+  "adminPath": "/admin/ethbat-reviews",
+  "ownedDataKeys": ["ethbatReviews"],
+  "externalResources": {
+    "script": "https://ethbat.vercel.app/widget/ethbat-widget.js",
+    "apiOrigin": "https://ethbat.vercel.app"
+  }
+}

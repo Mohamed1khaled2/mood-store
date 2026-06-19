@@ -8,6 +8,7 @@ import ProductGallery from "./ProductGallery";
 import ProductActions from "./ProductActions";
 import ProductCard from "@/components/home/ProductCard";
 import { absoluteUrl, localizedPath, siteConfig } from "@/utils/site-config";
+import { EthbatPlacementBlock } from "@/plugins/ethbat-reviews";
 
 type ProductPageProps = {
   params: Promise<{
@@ -181,6 +182,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
           </section>
         )}
+
+        <EthbatPlacementBlock
+          placement="product"
+          locale={locale}
+          wrapperClassName="mt-24 border-t border-[#201711]/10 pt-16"
+          heading={locale === "ar" ? "تقييمات العملاء" : "Customer reviews"}
+        />
       </div>
     </main>
   );

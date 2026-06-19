@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { Category, Product, StorePerk, Testimonial } from "./store";
+import type { EthbatPluginSettings } from "@/plugins/ethbat-reviews/types";
 
 // Add StoreSection type to store.ts later, for now define here
 export type LocalizedText = {
@@ -80,6 +81,7 @@ export type DatabaseSchema = {
   sections: StoreSection[];
   settings?: GeneralSettings;
   orders?: Order[];
+  ethbatReviews?: EthbatPluginSettings;
 };
 
 const DB_PATH = path.join(process.cwd(), "data", "db.json");
