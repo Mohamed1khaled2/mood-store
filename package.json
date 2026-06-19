@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "tsc -p tsconfig.tests.json && node --test .test-dist/tests/*.test.js",
+    "plugin:cleanup": "node plugins/ethbat-reviews/scripts/uninstall.mjs",
+    "plugin:purge": "node plugins/ethbat-reviews/scripts/uninstall.mjs --purge-data"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

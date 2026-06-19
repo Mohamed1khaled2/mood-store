@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { getDb } from "@/data/db";
 import { dictionary, Locale } from "@/app/i18n";
@@ -8,7 +7,7 @@ import ProductGallery from "./ProductGallery";
 import ProductActions from "./ProductActions";
 import ProductCard from "@/components/home/ProductCard";
 import { absoluteUrl, localizedPath, siteConfig } from "@/utils/site-config";
-import { EthbatPlacementBlock } from "@/plugins/ethbat-reviews";
+import EthbatPlacementBlock from "@/plugins/ethbat-reviews/EthbatPlacement";
 
 type ProductPageProps = {
   params: Promise<{

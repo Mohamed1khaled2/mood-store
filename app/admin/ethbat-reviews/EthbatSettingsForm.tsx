@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  buildEthbatEmbedCode,
-  type EthbatDisplaySettings,
-  type EthbatKind,
-  type EthbatLanguage,
-  type EthbatMode,
-  type EthbatPlacement,
-  type EthbatPluginSettings,
-  type EthbatTheme,
-} from "@/plugins/ethbat-reviews";
+import { buildEthbatEmbedCode } from "@/plugins/ethbat-reviews/embed";
+import type {
+  EthbatDisplaySettings,
+  EthbatKind,
+  EthbatLanguage,
+  EthbatMode,
+  EthbatPlacement,
+  EthbatPluginSettings,
+  EthbatTheme,
+} from "@/plugins/ethbat-reviews/types";
 import { updateEthbatSettings } from "./actions";
 
 type Props = { initialSettings: EthbatPluginSettings };
@@ -121,7 +121,10 @@ export default function EthbatSettingsForm({ initialSettings }: Props) {
   const [error, setError] = useState("");
 
   const embedCode = useMemo(
-    () => buildEthbatEmbedCode(settings.storeSlug, settings.defaults),
+    () =>
+      settings.storeSlug
+        ? buildEthbatEmbedCode(settings.storeSlug, settings.defaults)
+        : "أدخل Store slug صالحًا لتوليد الكود.",
     [settings.defaults, settings.storeSlug],
   );
 

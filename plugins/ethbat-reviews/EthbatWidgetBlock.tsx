@@ -48,43 +48,53 @@ export default function EthbatWidgetBlock({
     if (!host) return;
     const controller = new AbortController();
     let observer: MutationObserver | undefined;
+    let widgetMounted = false;
 
     setState("loading");
 
-    fetch(
-      `https://ethbat.vercel.app/api/widget/${encodeURIComponent(
-        attributes["data-store"],
-      )}?limit=${attributes["data-limit"]}${
-        attributes["data-kind"]
-          ? `&kind=${encodeURIComponent(attributes["data-kind"])}`
-          : ""
-      }`,
-      { signal: controller.signal },
-    )
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Ethbat API returned ${response.status}`);
-        }
-        const data = (await response.json()) as { reviews?: unknown[] };
-        setState(data.reviews?.length ? "ready" : "empty");
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        console.error("[Ethbat] Widget API preflight failed.", error);
-        setState("error");
-      });
+    if (process.env.NODE_ENV === "development") {
+      fetch(
+        `https://ethbat.vercel.app/api/widget/${encodeURIComponent(
+          attributes["data-store"],
+        )}?limit=${attributes["data-limit"]}${
+          attributes["data-kind"]
+            ? `&kind=${encodeURIComponent(attributes["data-kind"])}`
+            : ""
+        }`,
+        { signal: controller.signal },
+      )
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error(`Ethbat API returned ${response.status}`);
+          }
+          const data = (await response.json()) as { reviews?: unknown[] };
+          setState(
+            widgetMounted ? "ready" : data.reviews?.length ? "ready" : "empty",
+          );
+        })
+        .catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === "AbortError") {
+            return;
+          }
+          console.error("[Ethbat] Widget API preflight failed.", error);
+          setState("error");
+        });
+    }
 
     try {
-      const script = mountEthbatScript(host, attributes);
+      const script = mountEthbatScript(host, attributes, () =>
+        setState("error"),
+      );
       observer = new MutationObserver(() => {
-        if (script.previousElementSibling) setState((value) =>
-          value === "loading" ? "ready" : value,
-        );
+        if (script.previousElementSibling) {
+          widgetMounted = true;
+          setState("ready");
+        }
       });
       observer.observe(host, { childList: true });
     } catch (error) {
       console.error(error);
-      setState("error");
+      queueMicrotask(() => setState("error"));
     }
 
     return () => {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getEthbatSettings } from "@/plugins/ethbat-reviews";
+import { getEthbatSettings } from "@/plugins/ethbat-reviews/storage";
 import EthbatSettingsForm from "./EthbatSettingsForm";
 
 export const metadata: Metadata = {

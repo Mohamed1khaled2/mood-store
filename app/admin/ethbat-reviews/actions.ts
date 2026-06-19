@@ -2,11 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { getDb, saveDb } from "@/data/db";
-import {
-  validateEthbatSettings,
-  type EthbatActionResult,
-  type EthbatPluginSettings,
-} from "@/plugins/ethbat-reviews";
+import { validateEthbatSettings } from "@/plugins/ethbat-reviews/config";
+import type {
+  EthbatActionResult,
+  EthbatPluginSettings,
+} from "@/plugins/ethbat-reviews/types";
 
 export async function updateEthbatSettings(
   input: EthbatPluginSettings,

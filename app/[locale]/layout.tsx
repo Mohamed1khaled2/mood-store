@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BottomBar from "@/components/BottomBar";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
-import { isLocale, dictionary } from "@/app/i18n";
+import { isLocale, dictionary, type Locale } from "@/app/i18n";
 import { notFound } from "next/navigation";
 import { getSettings } from "@/data/db";
 import { absoluteUrl, localizedPath, siteConfig } from "@/utils/site-config";
@@ -33,7 +33,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const safeLocale = isLocale(locale) ? locale : siteConfig.defaultLocale;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
   const settings = await getSettings();
   const title = settings.storeName?.[safeLocale] || siteConfig.name;
   const description =

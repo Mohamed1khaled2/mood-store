@@ -14,6 +14,7 @@ function findGeneratedContainer(script: HTMLScriptElement): HTMLElement | null {
 export function mountEthbatScript(
   host: HTMLElement,
   attributes: EthbatScriptAttributes,
+  onError?: (event: Event) => void,
 ): HTMLScriptElement {
   const scopedWindow = window as LoaderWindow;
   const existing = document.getElementById(ETHBAT_SCRIPT_ID);
@@ -33,6 +34,7 @@ export function mountEthbatScript(
   });
   script.addEventListener("error", (event) => {
     console.error("[Ethbat] Failed to load the widget script.", event);
+    onError?.(event);
   });
 
   scopedWindow.__ethbatWidgetOwner = host;

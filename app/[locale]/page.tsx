@@ -9,7 +9,7 @@ import ProductGridSection from "../../components/home/ProductGridSection";
 import TestimonialsSection from "../../components/home/TestimonialsSection";
 import { getDb } from "@/data/db";
 import { isLocale, dictionary } from "@/app/i18n";
-import { EthbatPlacementBlock } from "@/plugins/ethbat-reviews";
+import EthbatPlacementBlock from "@/plugins/ethbat-reviews/EthbatPlacement";
 
 export default async function Home({
   params,

@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "incremental": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": ".test-dist",
+    "rootDir": "."
+  },
+  "include": [
+    "plugins/ethbat-reviews/types.ts",
+    "plugins/ethbat-reviews/config.ts",
+    "plugins/ethbat-reviews/embed.ts",
+    "plugins/ethbat-reviews/loader.ts",
+    "tests/**/*.test.ts"
+  ]
+}
